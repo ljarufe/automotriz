@@ -1,0 +1,22 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}common/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#id_tipo_servicio").change(function() {
+                var request = $.ajax({
+                    url: "{% url 'json_get_precio' %}",
+                    type: "GET",
+                    data: {id_tipo_servicio: this.value},
+                    dataType: "html"
+                });
+                request.done(function(msg) {
+                    var data = jQuery.parseJSON(msg);
+                    $("#id_precio").val(data.precio);
+                });
+            });
+        });
+    </script>
+{% endblock %}

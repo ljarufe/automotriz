@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "servicios.tiposervicio", "fields": {"descripcion": "Cambio de aceite", "precio_base": 50.0}}, {"pk": 1, "model": "servicios.servicio", "fields": {"tipo_servicio": 1, "fecha": "2013-06-03", "precio": 50.6, "cliente": 1, "empleado": null}}]

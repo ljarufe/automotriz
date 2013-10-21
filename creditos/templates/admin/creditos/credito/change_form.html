@@ -1,0 +1,53 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}common/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#id_tipo_credito").change(function() {
+                if(this.value == "C") {
+                    $(".field-proveedor").slideDown("slow");
+                    $(".field-cliente").slideUp("slow");
+                }
+                else if(this.value == "V") {
+                    $(".field-proveedor").slideUp("slow");
+                    $(".field-cliente").slideDown("slow");
+                }
+            });
+
+            $("#id_numero_cuotas").change(function() {
+                var cuotas = parseInt($(this).val());
+                for(var i=0; i<cuotas; i++) {
+                    var item = '<tr class="form-row dynamic-planpago_set row1" id="planpago_set-0">' +
+                                    '<td class="original">' +
+                                        '<input id="id_planpago_set-0-id" name="planpago_set-0-id" type="hidden">' +
+                                        '<input id="id_planpago_set-0-credito" name="planpago_set-0-credito" type="hidden">' +
+                                    '</td>' +
+                                    '<td class="field-numero_cuota">' +
+                                        '<input class="vIntegerField" id="id_planpago_set-0-numero_cuota" name="planpago_set-0-numero_cuota" type="text">' +
+                                    '</td>' +
+                                    '<td class="field-estado_cuota">' +
+                                        '<input id="id_planpago_set-0-estado_cuota" name="planpago_set-0-estado_cuota" type="checkbox">' +
+                                    '</td>' +
+                                    '<td class="field-capital_pactado">' +
+                                        '<input id="id_planpago_set-0-capital_pactado" name="planpago_set-0-capital_pactado" type="text">' +
+                                    '</td>' +
+                                    '<td class="field-capital_pagado">' +
+                                        '<input id="id_planpago_set-0-capital_pagado" name="planpago_set-0-capital_pagado" type="text">' +
+                                    '</td>' +
+                                    '<td class="field-fecha_vencimiento">' +
+                                        '<input class="vDateField" id="id_planpago_set-0-fecha_vencimiento" name="planpago_set-0-fecha_vencimiento" size="10" type="text"><span class="datetimeshortcuts">&nbsp;<a href="javascript:DateTimeShortcuts.handleCalendarQuickLink(5, 0);">Hoy</a>&nbsp;|&nbsp;<a href="javascript:DateTimeShortcuts.openCalendar(5);" id="calendarlink5"><img src="/static/admin/img/icon_calendar.gif" alt="Calendario"></a></span>' +
+                                    '</td>' +
+                                    '<td class="delete"><div><a class="inline-deletelink" href="javascript:void(0)">Eliminar</a></div></td>' +
+                                '</tr>';
+                }
+            });
+        });
+    </script>
+    <style>
+        .field-cliente, .field-proveedor {
+            display: none;
+        }
+    </style>
+{% endblock %}

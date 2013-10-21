@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "common.constantes", "fields": {"descripcion": "IGV", "valor": "18"}}, {"pk": 1, "model": "common.cambiomoneda", "fields": {"fecha": "2013-06-03", "cambio": 2.6}}]

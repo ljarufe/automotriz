@@ -1,0 +1,78 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}common/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        var sum_total = function() {
+            var total = 0;
+            $(".field-precio input").each(function() {
+                if($(this).val())
+                    total += parseFloat($(this).val().replace(",", "."));
+            });
+            $("#id_total").val(total);
+        };
+
+        var calcular_subtotal = function(item) {
+            var parent = item.parent().parent();
+            var elem = parent.find(".field-precio input");
+            var precio_unitario = parseFloat(parent.find(".field-precio_producto select option:selected").text().split("-")[1].trim().replace(",", "."));
+            var cantidad = parseFloat(parent.find(".field-cantidad input").val().replace(",", "."));
+            elem.val(precio_unitario * cantidad);
+            sum_total();
+        };
+
+        $(document).ready(function() {
+            $("#id_tipo_documento").change(function() {
+                if(this.value == "C") {
+                    $(".field-proveedor").slideDown("slow");
+                    $(".field-cliente").slideUp("slow");
+                }
+                else if(this.value == "V") {
+                    $(".field-proveedor").slideUp("slow");
+                    $(".field-cliente").slideDown("slow");
+                }
+            });
+            $("#id_tipo_pago").change(function() {
+                if(this.value == "Cr")
+                    $(".field-credito").slideDown("slow");
+                if(this.value == "Co")
+                    $(".field-credito").slideUp("slow");
+            });
+
+            $(".field-producto_almacen select").change(function() {
+                var select = $(this);
+                var request = $.ajax({
+                    url: "{% url 'json_get_precios_producto' %}",
+                    type: "GET",
+                    data: {id_producto: this.value},
+                    dataType: "html"
+                });
+                request.done(function(msg) {
+                    var data = jQuery.parseJSON(msg);
+                    var elem = select.parent().next().find("select");
+                    elem.html('<option value="" selected="selected">---------</option>');
+                    for(var i=0; i<data.length; i++)
+                        elem.append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
+                });
+            });
+
+            $(".field-precio_producto select").change(function() {
+                calcular_subtotal($(this));
+            });
+
+            $(".field-precio input").change(function() {
+                sum_total();
+            });
+
+            $(".field-cantidad input").change(function() {
+                calcular_subtotal($(this));
+            });
+        });
+    </script>
+    <style>
+        .field-cliente, .field-proveedor, .field-credito {
+            display: none;
+        }
+    </style>
+{% endblock %}
